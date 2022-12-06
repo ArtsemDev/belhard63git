@@ -61,3 +61,88 @@
 #     print(val)
 # for key, val in data.items():
 #     print(key, val)
+
+# вводится произвольная строка, вывести из нее только буквы в верхнем регистре
+# text = input('text: ')
+# for elem in text:
+#     if elem.isupper():
+#         print(elem)
+
+# for i in range(100):
+#     if not i % 7:
+#         continue
+#     print(i)
+
+# for i in range(10):
+#     if i == 7:
+#         break
+#     print(i)
+# print('finish!')
+
+# for i in range(10):
+#     if i == 7:
+#         break
+#     print(i)
+# else:
+#     print('закончился самостоятельно!')
+
+# a = 2
+# while a <= 1024:
+#     a **= 2
+#     print(a)
+
+# дан список чисел, удалить из списка все 2 (while)
+# numbers = [5, 12, 4, 2, 4, 21, 4, 2, 4, 2, 4, 2, 7, 8, 2]
+# while 2 in numbers:
+#     numbers.remove(2)
+# print(numbers)
+
+
+# спрашивать у пользователя данные с клавиатуры до тех пор, пока он не введет число
+# number = input('enter number: ')
+# while not number.isdigit():
+#     number = input('are you stupid? try again: ')
+
+# number1 = input()
+# number2 = input()
+# try:
+#     number1 = int(number1)
+#     number2 = int(number2)
+#     number3 = number1 / number2
+# except ValueError:
+#     print('неверные данные')
+# except ZeroDivisionError:
+#     print('на 0 делить нельзя')
+
+# number1 = input()
+# number2 = input()
+# try:
+#     number1 = int(number1)
+#     number2 = int(number2)
+#     number3 = number1 / number2
+# except ValueError:
+#     print('value error')
+# except Exception as e:
+#     print(e)
+# else:
+#     print('ошибок не было')
+# finally:
+#     print('работает всегда')
+
+# card_number = input()
+# if not card_number.isdigit() or len(card_number) != 16:
+#     raise ValueError('invalid card number')
+
+# вводится число, посчитать сумму его цифр
+# number = input('enter number: ')
+# s = 0
+# for i in number:
+#     s += int(i)
+# print(f'{s=}')
+numbers = []
+for i in range(1, 101):
+    if (i ** 2) % 5:
+        numbers.append(i**2)
+print(numbers)
+
+numbers = [i**2 for i in range(1, 101) if (i ** 2) % 5]
