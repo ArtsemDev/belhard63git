@@ -182,3 +182,23 @@ def filter_users(users: dict[int, dict[str, str]]) -> list[str]:
         if not user.get('email'):
             result.append(user['name'])
     return result
+
+
+users = {
+    1: {
+        'name': 'name1',
+        'email': 'email@email.com'
+    },
+    2: {
+        'name': 'name2',
+        'email': ''
+    },
+    3: {
+        'name': 'name3',
+        'email': None
+    },
+    4: {
+        'name': 'name4'
+    },
+}
+users = list(filter(lambda x: not x.get('email'), users.values()))
