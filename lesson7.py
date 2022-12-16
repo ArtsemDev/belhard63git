@@ -202,3 +202,54 @@ users = {
     },
 }
 users = list(filter(lambda x: not x.get('email'), users.values()))
+
+
+# SMS — может нести в себе информацию длиною 140 байт, цифры,
+# символы и буквы латинского алфавита занимают 1 байт,
+# русские же буквы занимают 2 байт
+# На вход подается текст, необходимо сказать, на сколько SMS-ок
+# данное сообщение будет разбито для отправки
+
+
+def sms_spliter(sms: str) -> int:
+    from string import printable
+    bytes_count = len(sms.encode())
+    # bytes_count = 0
+    # for el in sms:
+    #     bytes_count += 1 if el in printable else 2
+    count = bytes_count / 140
+    if count.is_integer():
+        return int(count)
+    else:
+        return int(count) + 1
+
+
+# ВВОДИТСЯ СУММА, ВВОДИТСЯ ПРОЦЕНТНАЯ СТАВКА, СКАЗАТЬ ЧЕРЕЗ СКОЛЬКО ЛЕТ
+# ВКЛАД УВЕЛИЧИТСЯ МИНИМУМ ВДВОЕ (КАПИТАЛИЗАЦИЯ)
+
+
+def deposit_calculator(deposit: float, percent: float) -> int:
+    year = 0
+    percent += 1
+    double_deposit = deposit * 2
+    while deposit < double_deposit:
+        deposit *= percent
+        year += 1
+    return year
+
+
+# На вход поступает количество секунд, сказать сколько это часов:минут:секунд
+# пример: 7336 → 02:02:16
+
+
+def time_from_seconds(seconds: int) -> str:
+    hour = seconds // 3600
+    seconds %= 3600
+    minute = seconds // 60
+    seconds %= 60
+    hour = str(hour).zfill(2)
+    minute = str(minute).zfill(2)
+    minute = str(minute).zfill(2)
+    seconds = str(seconds).zfill(2)
+    time = f'{hour}:{minute}:{seconds}'
+    return time
