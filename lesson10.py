@@ -65,3 +65,64 @@
 #     #     line += '\n'
 #     #     text += line
 #     # file.write(text)
+from datetime import datetime
+
+from pydantic import BaseModel, Field, validator, EmailStr, root_validator
+
+categories = ['Category2', 'Category3']
+
+
+user = {
+    'name': 'Alex',
+    'age': 34,
+    'languages': ['ru'],
+    'city': 'Minsk',
+    'category': {
+        'name': 'Category1',
+        'description': 'description'
+    },
+}
+
+
+class CategorySchema(BaseModel):
+    name: str
+    description: str
+    date_created: datetime = None
+
+    @validator('name')
+    def validate_name(cls, value):
+        if value not in categories:
+            return value
+        raise ValueError('name is not unique')
+
+    @validator('date_created', pre=True)
+    def validate_date_created(cls, value):
+        return datetime.fromtimestamp(value)
+
+
+class UserSchema(BaseModel):
+    name: str = Field(min_length=4)
+    age: int = Field(ge=18, lt=100)
+    languages: list[str] = Field(min_items=1)
+    city: str = Field(default=None, min_length=5)
+    category: CategorySchema
+    email: EmailStr
+
+    @root_validator(pre=True)
+    def validate_email(cls, values):
+        if values.get('email'):
+            if values.get('name') in values.get('email'):
+                return values
+        else:
+            values['email'] = values.get('name') + '@gmail.com'
+            return values
+        raise ValueError('почта не содержит имя')
+
+
+# try:
+data = UserSchema(**user)
+# except Exception as e:
+#     print(e)
+print(data.category.name)
+print(data.city)
+print(data.languages[0])
