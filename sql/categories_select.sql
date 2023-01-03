@@ -1,0 +1,1 @@
+SELECT * FROM categories WHERE name LIKE '%Распродажа%' ORDER BY id ASC;
