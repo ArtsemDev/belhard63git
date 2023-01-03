@@ -1,0 +1,9 @@
+article,title,description,price
+1,prod1,descr1,100
+2,prod1,,100
+3,prod1,descr1,
+,prod1,descr1,100
+5,,descr1,100
+6,prod1,descr1,qwer
+7,prod1,descr1,120
+8,prod1,descr1,150
