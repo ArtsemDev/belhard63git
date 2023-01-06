@@ -96,5 +96,19 @@ from models import Category, Product, User
     # session.commit()
 
 
-response = Category.join(right=Product)
-print(response)
+# response = Category.join(right=Product)
+# print(response)
+
+# from csv import DictWriter
+#
+# categories = Category.all()
+# categories = list(map(lambda x: x.dict(), categories))
+# keys = list(categories[0].keys())
+#
+# with open('categories.csv', 'w', encoding='utf-8') as file:
+#     writer = DictWriter(file, fieldnames=keys)
+#     writer.writeheader()
+#     writer.writerows(categories)
+
+# Product.load_csv('products.csv', 'w')
+Category.upload_csv('categories.csv')

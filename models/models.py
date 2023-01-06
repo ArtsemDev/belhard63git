@@ -1,4 +1,5 @@
 from sqlalchemy import Column, INT, VARCHAR, BOOLEAN, DECIMAL, ForeignKey, create_engine, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
 
 
@@ -56,6 +57,44 @@ class Base(DeclarativeBase):
     def join(cls, right, session: Session = None, **kwargs):
         response = session.query(cls, right).join(right).filter_by(**kwargs)
         return response.all()
+
+    @classmethod
+    def save_to_csv(cls, filename: str, mode: str, **kwargs):
+        from csv import DictWriter
+        objs = cls.all(**kwargs)
+        objs = list(map(lambda x: x.dict(), objs))
+        fieldnames = list(objs[0].keys())
+        with open(filename, mode) as file:
+            writer = DictWriter(file, fieldnames=fieldnames)
+            if mode == 'w':
+                writer.writeheader()
+            writer.writerows(objs)
+
+    @classmethod
+    def upload_from_csv(cls, filename: str, separator: str = ','):
+        with open(filename, 'r') as file:
+            fieldnames = file.readline().strip().split(separator)
+            for line in file:
+                line = line.strip().split(separator)
+                obj = {}
+                for i in range(len(line)):
+                    if line[i].lower() in ('true', 'false'):
+                        obj[fieldnames[i]] = True if line[i].lower() == 'true' else False
+                    elif line[i].lower() in ('null', 'none', 'nonetype', ''):
+                        obj[fieldnames[i]] = None
+                    elif line[i].isdigit():
+                        obj[fieldnames[i]] = int(line[i])
+                    else:
+                        try:
+                            obj[fieldnames[i]] = float(line[i])
+                        except ValueError:
+                            obj[fieldnames[i]] = line[i]
+
+                obj = cls(**obj)
+                try:
+                    obj.save()
+                except IntegrityError:
+                    pass
 
     def dict(self):
         data = self.__dict__
