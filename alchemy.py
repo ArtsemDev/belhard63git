@@ -1,5 +1,7 @@
-# from models import Category, Product, User
+from models import Category, Product, User
 
+# category = Category()[1]
+# print(category)
 
 # category = Category(name='Doping', is_published=False)
 # category.save()
@@ -27,40 +29,35 @@
 #     session.refresh(category)
 #     print(category.id)
 
-# with _Session() as session:
-#     products = [
-#         {
-#             'title': 'Food 1',
-#             'descr': 'Descr 1',
-#             'price': 100,
-#             'category_id': 1
-#         },
-#         {
-#             'title': 'Food 2',
-#             'descr': 'Descr 2',
-#             'price': 150,
-#             'category_id': 1
-#         },
-#         {
-#             'title': 'Drinks 1',
-#             'descr': 'Descr 3',
-#             'price': 50,
-#             'category_id': 2
-#         },
-#         {
-#             'title': 'Drinks 2',
-#             'descr': 'Descr 4',
-#             'price': 75,
-#             'category_id': 2
-#         }
-#     ]
-#     for product in products:
-#         product = Product(**product)
-#         session.add(product)
-#         try:
-#             session.commit()
-#         except IntegrityError:
-#             pass
+# products = [
+#     {
+#         'title': 'Food 1',
+#         'descr': 'Descr 1',
+#         'price': 100,
+#         'category_id': 1
+#     },
+#     {
+#         'title': 'Food 2',
+#         'descr': 'Descr 2',
+#         'price': 150,
+#         'category_id': 1
+#     },
+#     {
+#         'title': 'Drinks 1',
+#         'descr': 'Descr 3',
+#         'price': 50,
+#         'category_id': 2
+#     },
+#     {
+#         'title': 'Drinks 2',
+#         'descr': 'Descr 4',
+#         'price': 75,
+#         'category_id': 2
+#     }
+# ]
+# for product in products:
+#     product = Product(**product)
+#     product.save()
 
 # with _Session() as session:
 #     # category = session.get(Category, 2)
@@ -97,3 +94,7 @@
     # category.is_published = False
     # session.add(category)
     # session.commit()
+
+
+response = Category.join(right=Product)
+print(response)

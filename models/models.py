@@ -1,11 +1,8 @@
 from sqlalchemy import Column, INT, VARCHAR, BOOLEAN, DECIMAL, ForeignKey, create_engine, select
-from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
 
 
-Base = declarative_base()
-
-
-class BaseMixin:
+class Base(DeclarativeBase):
     id = Column(INT, primary_key=True)
 
     engine = create_engine('postgresql://milvus:qwerty12345678@0.0.0.0:5432/bh63')
@@ -14,7 +11,7 @@ class BaseMixin:
     @staticmethod
     def create_session(func):
         def wrapper(*args, **kwargs):
-            with BaseMixin._Session() as session:
+            with Base._Session() as session:
                 return func(*args, **kwargs, session=session)
 
         return wrapper
@@ -54,6 +51,12 @@ class BaseMixin:
         session.delete(self)
         session.commit()
 
+    @classmethod
+    @create_session
+    def join(cls, right, session: Session = None, **kwargs):
+        response = session.query(cls, right).join(right).filter_by(**kwargs)
+        return response.all()
+
     def dict(self):
         data = self.__dict__
         if '_sa_instance_state' in data:
@@ -86,14 +89,14 @@ class BaseMixin:
             raise StopIteration
 
 
-class Category(BaseMixin, Base):
+class Category(Base):
     __tablename__ = 'categories'
 
     name = Column(VARCHAR(24), nullable=False, unique=True)
     is_published = Column(BOOLEAN, default=True, nullable=False)
 
 
-class Product(BaseMixin, Base):
+class Product(Base):
     __tablename__ = 'products'
 
     title = Column(VARCHAR(36), nullable=False)
@@ -102,7 +105,7 @@ class Product(BaseMixin, Base):
     category_id = Column(INT, ForeignKey('categories.id', ondelete='CASCADE'), nullable=False)
 
 
-class User(BaseMixin, Base):
+class User(Base):
     __tablename__ = 'users'
 
     name = Column(VARCHAR(24), nullable=False)
