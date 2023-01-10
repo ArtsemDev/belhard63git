@@ -75,10 +75,11 @@
 import psycopg2
 
 
-conn = psycopg2.connect('postgresql://milvus:qwerty12345678@0.0.0.0:5432/bh63')
+conn = psycopg2.connect("postgresql://milvus:qwerty12345678@0.0.0.0:5432/bh63")
 with conn:
     with conn.cursor() as cur:
-        cur.execute('''
+        cur.execute(
+            """
             CREATE TABLE IF NOT EXISTS products(
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(64) NOT NULL UNIQUE,
@@ -86,10 +87,11 @@ with conn:
                 category_id INTEGER NOT NULL,
                 FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
             );
-        ''')
+        """
+        )
         conn.commit()
         # cur.execute("INSERT INTO categories(name) VALUES ('Food');")
         # conn.commit()
-        cur.execute('SELECT * FROM categories;')
+        cur.execute("SELECT * FROM categories;")
         print(cur.fetchall())
 conn.close()

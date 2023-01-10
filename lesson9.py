@@ -190,19 +190,19 @@
 
 
 class Car(object):
-    
-    def __init__(self, count_passenger_seat: int, is_baby_seat: bool, color: str) -> None:
+    def __init__(
+        self, count_passenger_seat: int, is_baby_seat: bool, color: str
+    ) -> None:
         self.color = color
         self.count_passenger_seat = count_passenger_seat
         self.is_baby_seat = is_baby_seat
         self.is_busy = False
 
     def __str__(self) -> str:
-        return f'Car {self.count_passenger_seat=} {self.is_baby_seat=} {self.is_busy=} {self.color=}'
+        return f"Car {self.count_passenger_seat=} {self.is_baby_seat=} {self.is_busy=} {self.color=}"
 
-        
+
 class Taxi(object):
-
     def __init__(self, cars: list[Car]):
         self.cars = cars
 

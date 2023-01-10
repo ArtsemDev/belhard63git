@@ -1,5 +1,3 @@
-from models import Category, Product, User
-
 # category = Category()[1]
 # print(category)
 
@@ -79,21 +77,21 @@ from models import Category, Product, User
 #     product = session.get(Product, 3)
 #     session.delete(product)
 #     session.commit()
-    # session.execute(delete(Product).where(Product.id == 4))
-    # session.commit()
+# session.execute(delete(Product).where(Product.id == 4))
+# session.commit()
 
 # with _Session() as session:
-    # session.execute(
-    #     update(Category)
-    #     .where(Category.id == 2)
-    #     .values(name='Coffee')
-    # )
-    # session.commit()
-    # category = session.get(Category, 2)
-    # category.name = 'Drinks'
-    # category.is_published = False
-    # session.add(category)
-    # session.commit()
+# session.execute(
+#     update(Category)
+#     .where(Category.id == 2)
+#     .values(name='Coffee')
+# )
+# session.commit()
+# category = session.get(Category, 2)
+# category.name = 'Drinks'
+# category.is_published = False
+# session.add(category)
+# session.commit()
 
 
 # response = Category.join(right=Product)
@@ -111,4 +109,46 @@ from models import Category, Product, User
 #     writer.writerows(categories)
 
 # Product.load_csv('products.csv', 'w')
-Category.upload_csv('categories.csv')
+
+# from models import Category
+#
+#
+# categories = [
+#     ('Cat1', None),
+#     ('Cat2', None),
+#     ('Cat3', 1),
+#     ('Cat4', 2),
+#     ('Cat5', 1),
+#     ('Cat6', 4)
+# ]
+# for category in categories:
+#     category = Category(name=category[0], parent_id=category[1])
+#     category.save()
+
+
+data = [
+    {
+        'name': 'Cat1',
+        'subcategories': [
+            {
+                'name': 'Cat3'
+            },
+            {
+                'name': 'Cat5'
+            }
+        ]
+    },
+    {
+        'name': 'Cat2',
+        'subcategories': [
+            {
+                'name': 'Cat4',
+                'subcategories': [
+                    {
+                        'name': 'Cat6'
+                    }
+                ]
+            }
+        ]
+    }
+]

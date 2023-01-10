@@ -1,4 +1,13 @@
-from sqlalchemy import Column, INT, VARCHAR, BOOLEAN, DECIMAL, ForeignKey, create_engine, select
+from sqlalchemy import (
+    Column,
+    INT,
+    VARCHAR,
+    BOOLEAN,
+    DECIMAL,
+    ForeignKey,
+    create_engine,
+    select,
+)
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
 
@@ -6,7 +15,7 @@ from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
 class Base(DeclarativeBase):
     id = Column(INT, primary_key=True)
 
-    engine = create_engine('postgresql://milvus:qwerty12345678@0.0.0.0:5432/bh63')
+    engine = create_engine("postgresql://milvus:qwerty12345678@0.0.0.0:5432/bh63")
     _Session = sessionmaker(bind=engine)
 
     @staticmethod
@@ -31,12 +40,12 @@ class Base(DeclarativeBase):
     @classmethod
     @create_session
     def all(
-            cls,
-            order_by: str = 'id',
-            limit: int = None,
-            offset: int = None,
-            session: Session = None,
-            **kwargs
+        cls,
+        order_by: str = "id",
+        limit: int = None,
+        offset: int = None,
+        session: Session = None,
+        **kwargs
     ):
         objs = session.scalars(
             select(cls)
@@ -61,26 +70,29 @@ class Base(DeclarativeBase):
     @classmethod
     def save_to_csv(cls, filename: str, mode: str, **kwargs):
         from csv import DictWriter
+
         objs = cls.all(**kwargs)
         objs = list(map(lambda x: x.dict(), objs))
         fieldnames = list(objs[0].keys())
         with open(filename, mode) as file:
             writer = DictWriter(file, fieldnames=fieldnames)
-            if mode == 'w':
+            if mode == "w":
                 writer.writeheader()
             writer.writerows(objs)
 
     @classmethod
-    def upload_from_csv(cls, filename: str, separator: str = ','):
-        with open(filename, 'r') as file:
+    def upload_from_csv(cls, filename: str, separator: str = ","):
+        with open(filename, "r") as file:
             fieldnames = file.readline().strip().split(separator)
             for line in file:
                 line = line.strip().split(separator)
                 obj = {}
                 for i in range(len(line)):
-                    if line[i].lower() in ('true', 'false'):
-                        obj[fieldnames[i]] = True if line[i].lower() == 'true' else False
-                    elif line[i].lower() in ('null', 'none', 'nonetype', ''):
+                    if line[i].lower() in ("true", "false"):
+                        obj[fieldnames[i]] = (
+                            True if line[i].lower() == "true" else False
+                        )
+                    elif line[i].lower() in ("null", "none", "nonetype", ""):
                         obj[fieldnames[i]] = None
                     elif line[i].isdigit():
                         obj[fieldnames[i]] = int(line[i])
@@ -98,8 +110,8 @@ class Base(DeclarativeBase):
 
     def dict(self):
         data = self.__dict__
-        if '_sa_instance_state' in data:
-            del data['_sa_instance_state']
+        if "_sa_instance_state" in data:
+            del data["_sa_instance_state"]
         return data
 
     def __call__(self, *args, **kwargs):
@@ -131,22 +143,31 @@ class Base(DeclarativeBase):
 class Category(Base):
     __tablename__ = 'categories'
 
-    name = Column(VARCHAR(24), nullable=False, unique=True)
-    is_published = Column(BOOLEAN, default=True, nullable=False)
-
-
-class Product(Base):
-    __tablename__ = 'products'
-
-    title = Column(VARCHAR(36), nullable=False)
-    descr = Column(VARCHAR(1024), nullable=True)
-    price = Column(DECIMAL(8, 2), nullable=False, default=0)
-    category_id = Column(INT, ForeignKey('categories.id', ondelete='CASCADE'), nullable=False)
-
-
-class User(Base):
-    __tablename__ = 'users'
-
     name = Column(VARCHAR(24), nullable=False)
-    email = Column(VARCHAR(24), nullable=False, unique=True)
-    surname = Column(VARCHAR(24), nullable=True)
+    parent_id = Column(INT, ForeignKey('categories.id', ondelete='CASCADE'), nullable=True)
+
+
+# class Category(Base):
+#     __tablename__ = "categories"
+#
+#     name = Column(VARCHAR(24), nullable=False, unique=True)
+#     is_published = Column(BOOLEAN, default=True, nullable=False)
+#
+#
+# class Product(Base):
+#     __tablename__ = "products"
+#
+#     title = Column(VARCHAR(36), nullable=False)
+#     descr = Column(VARCHAR(1024), nullable=True)
+#     price = Column(DECIMAL(8, 2), nullable=False, default=0)
+#     category_id = Column(
+#         INT, ForeignKey("categories.id", ondelete="CASCADE"), nullable=False
+#     )
+#
+#
+# class User(Base):
+#     __tablename__ = "users"
+#
+#     name = Column(VARCHAR(24), nullable=False)
+#     email = Column(VARCHAR(24), nullable=False, unique=True)
+#     surname = Column(VARCHAR(24), nullable=True)

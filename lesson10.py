@@ -69,18 +69,15 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field, validator, EmailStr, root_validator
 
-categories = ['Category2', 'Category3']
+categories = ["Category2", "Category3"]
 
 
 user = {
-    'name': 'Alex',
-    'age': 34,
-    'languages': ['ru'],
-    'city': 'Minsk',
-    'category': {
-        'name': 'Category1',
-        'description': 'description'
-    },
+    "name": "Alex",
+    "age": 34,
+    "languages": ["ru"],
+    "city": "Minsk",
+    "category": {"name": "Category1", "description": "description"},
 }
 
 
@@ -89,13 +86,13 @@ class CategorySchema(BaseModel):
     description: str
     date_created: datetime = None
 
-    @validator('name')
+    @validator("name")
     def validate_name(cls, value):
         if value not in categories:
             return value
-        raise ValueError('name is not unique')
+        raise ValueError("name is not unique")
 
-    @validator('date_created', pre=True)
+    @validator("date_created", pre=True)
     def validate_date_created(cls, value):
         return datetime.fromtimestamp(value)
 
@@ -110,13 +107,13 @@ class UserSchema(BaseModel):
 
     @root_validator(pre=True)
     def validate_email(cls, values):
-        if values.get('email'):
-            if values.get('name') in values.get('email'):
+        if values.get("email"):
+            if values.get("name") in values.get("email"):
                 return values
         else:
-            values['email'] = values.get('name') + '@gmail.com'
+            values["email"] = values.get("name") + "@gmail.com"
             return values
-        raise ValueError('почта не содержит имя')
+        raise ValueError("почта не содержит имя")
 
 
 # try:
