@@ -235,18 +235,56 @@ def dispatcher():
 
             def decorator(**kwargs):
                 return func(**kwargs)
+
             return decorator
+
         return wrapper
+
     filters.all = registry
     return filters
 
 
+# class Dispatcher(object):
+#
+#     def __call__(self, *args, **kwargs):
+#         registry = []
+#
+#         def filters(self, **kwargs):
+#             def wrapper(self, func):
+#                 registry.append({'func': func, 'filters': kwargs})
+#
+#                 def decorator(self, **kwargs):
+#                     return func(**kwargs)
+#
+#                 return decorator
+#
+#             return wrapper
+#
+#         filters.all = registry
+#         return filters
+#
+#     def run(self, data):
+#         for func in dp.all:
+#             for key, val in func.get('filters').items():
+#                 if key not in data:
+#                     break
+#                 if data.get(key) != val:
+#                     break
+#             else:
+#                 func['func'](**data)
+#
+#
 dp = dispatcher()
 
 
-@dp(a=5)
+@dp(a=5, b=4)
 def foo(**kwargs):
     print('foo')
+
+
+@dp(a=5)
+def baz(**kwargs):
+    print('baz')
 
 
 @dp(c=6, d=7, e=8)
@@ -266,4 +304,5 @@ def main(data):
 
 
 if __name__ == '__main__':
-    main({'c': 6, 'd': 7, 'e': 8, 'f': 9})
+    # dp.run({'a': 5, 'b': 7, 'e': 8, 'f': 9})
+    main({'a': 5, 'd': 7, 'e': 8, 'f': 9})
