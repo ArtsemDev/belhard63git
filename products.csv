@@ -1,9 +1,7 @@
-article,title,description,price
-1,prod1,descr1,100
-2,prod1,,100
-3,prod1,descr1,
-,prod1,descr1,100
-5,,descr1,100
-6,prod1,descr1,qwer
-7,prod1,descr1,120
-8,prod1,descr1,150
+id,descr,price,category_id,title
+1,Descr 1,100.00,1,Food 1
+2,Descr 2,150.00,1,Food 2
+5,Descr 1,100.00,1,Food 1
+6,Descr 2,150.00,1,Food 2
+7,Descr 3,50.00,2,Drinks 1
+8,Descr 4,75.00,2,Drinks 2
